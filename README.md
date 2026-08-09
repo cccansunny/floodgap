@@ -18,13 +18,9 @@ FloodGap is an attempt to answer that with data rather than intuition: score eve
 
 ## The two turns that shaped the project
 
-The project did not go as planned, and the detours are the interesting part.
+The original plan was to validate the model against CEAR Hub's 48 existing sensors: if the model scores high where experts placed sensors, it captures expert judgment. It did not. The 48 sites averaged only the 42nd percentile of the model's score distribution, slightly below random. The reason turned out to matter more than the result: those sensors were installed 6 to 8 years ago based on **feasibility**, easy access, near a waterway, something to mount on, often a fence post, and the deployment was never completed. They are where it was possible to install, not where it is ideal to install.
 
-**The validation could not work.** The original plan was to validate the model against CEAR Hub's 48 existing sensors: if the model scores high where experts placed sensors, it captures expert judgment. It did not. The 48 sites averaged only the 42nd percentile of the model's score distribution, slightly below random. The reason turned out to matter more than the result: those sensors were installed 6 to 8 years ago based on **feasibility**, easy access, near a waterway, something to mount on, often a fence post, and the deployment was never completed. They are where it was possible to install, not where it is ideal to install.
-
-So the mismatch is not a failed validation. It is a finding. The existing network is feasibility-limited and systematically misses high-risk, vulnerable places, and the model can surface exactly those. That gap is the second meaning of the project's name.
-
-**There are no correct weights to validate against.** With no ground truth of ideal placement, fitting weights is meaningless. The reference paper avoids weights entirely (Pareto sorting); the experts' own placements encode feasibility rather than a weighting of risk. So instead of guessing weights and calling them correct, this project treats weights as **explicit policy options**: five weighting schemes are scored, and the recommendation is the set of sites that rank high under every one of them.
+So the mismatch is not a failed validation. It is a finding. The existing network is feasibility-limited and systematically misses high-risk, vulnerable places, and the model can surface exactly those. That gap is the second meaning of the project's name. With no ground truth of ideal placement, fitting weights is meaningless. So instead of guessing weights and calling them correct, this project treats weights as **explicit policy options**: five weighting schemes are scored, and the recommendation is the set of sites that rank high under every one of them.
 
 ## What the model finds
 
@@ -58,26 +54,6 @@ Every factor is normalized 0 to 1 before weighting, and weights are normalized t
 | social vulnerability | CDC/ATSDR Social Vulnerability Index, tract level |
 
 The five schemes are Tidal-only (100/0/0, flood 60), Equal (33/33/33, flood 60), Harvey-informed (25/50/25, flood 60), Flood-dominant (33/33/33, flood 80) and Equity-forward (33/33/33, flood 50).
-
-## Repository layout
-
-```
-floodgap/
-  code/
-    floodgap_compound.py    full scoring pipeline, runs offline for both regions
-    render_maps.py          all static maps: per-scheme, overlay, cluster zoom-ins
-  interactive/
-    floodgap_weight_explorer_satellite.html   live sliders on a satellite basemap
-    floodgap_five_schemes_satellite.html      switch between the five schemes
-  data/
-    Vulnerability/          CDC SVI plus Census gazetteer files
-    Flood Risk/             NOAA tide station exports
-    Impervious/             NOAA C-CAP land cover raster
-    elev_cache_*.csv        cached USGS elevations so the pipeline runs offline
-  presentations/            weekly decks and the final presentation
-  figures/                  key maps used in the report and slides
-  FloodGap_Semester_Report.docx
-```
 
 ## Running the code
 
@@ -113,7 +89,3 @@ The semester report documents these in full, including the NOAA resolution probl
 ## Next steps
 
 Fine-grain the scoring to block-group level inside each cluster and rank streets using 311 flooding complaints and HCFCD flood history; desktop pre-screen candidate poles and bridges via Street View and ownership records; field reconnaissance with a structured site checklist; and test the model's picks against the areas the team wanted to monitor but could not install in.
-
----
-
-Full semester report, including the complete story and everything that did not work, is in `FloodGap_Semester_Report.docx`.
